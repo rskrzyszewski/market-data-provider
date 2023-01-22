@@ -1,0 +1,18 @@
+apply plugin: 'io.spring.dependency-management'
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    enabled = true
+}
+
+springBoot {
+    buildInfo()
+}
+
+gitProperties {
+    dateFormat = "yyyy-MM-dd'T'HH:mm.sss'Z'"
+    dateFormatTimeZone = 'UTC'
+}
