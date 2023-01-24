@@ -33,7 +33,7 @@ public class BufferingMessageListener implements MessageListener {
 
     @Override
     public void onMessage(String message) {
-        tickerProcessor.process(message);
+        queueMessage(message);
     }
 
     @Override
@@ -65,6 +65,16 @@ public class BufferingMessageListener implements MessageListener {
         }
     }
 
+    protected void queueMessage(String msg) {
+        try {
+            if (!queue.offer(msg)) {
+                logger.warn("Cannot put data on queue, will wait until it has space, msg: {}", msg);
+                queue.put(msg);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void processMessageFromQueue() {
         logQueueSize();
@@ -73,7 +83,7 @@ public class BufferingMessageListener implements MessageListener {
             if (msg == null) {
                 return;
             }
-            onMessage(msg);
+            tickerProcessor.process(msg);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
