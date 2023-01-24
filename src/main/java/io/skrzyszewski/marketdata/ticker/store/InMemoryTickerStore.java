@@ -13,6 +13,7 @@ public class InMemoryTickerStore implements TickerStoreReader, TickerStoreUpdate
 
     //TODO check if possible switching to the HashMap implementation.
     // The ephemeralStorage is updated by a single thread and is read by multiple threads
+    // Read first https://stackoverflow.com/questions/41952171/modifying-hash-map-from-a-single-thread-and-reading-from-multiple-threads
     private final Map<String, Ticker> ephemeralStorage = new ConcurrentHashMap<>();
 
     @Override
